@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Containers>
+<Plugin>True</Plugin>
+<PluginURL>https://raw.githubusercontent.com/itimpi/Unraid-File-Manager/master/Unraid-File-Manager.plg</PluginURL>
+<PluginAuthor>Dave walker (itimpi)</PluginAuthor>
+<Beta>False</Beta>
+<Category>Tools:System</Category>
+<Name>FileManager</Name>
+<MinVer>6.7.0</MinVer>
+<Description>A browser based FileManager tool for use with Unraid.</Description>
+<Support>https://forums.unraid.net/topic/78394-plugin-parity-check-tuning/</Support>
+<Icon>https://github.com/itimpi/Unraid-File-Manager/raw/master/source/usr/local/emhttp/plugins/Unraid-File-Manager/parity.check.tuning.png</Icon>
+<DonateText>Help keep me motivated!</DonateText>
+<DonateLink>https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=U2FVNHSETTNRG&amp;source=url</DonateLink>
+<DonateImage>https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif</DonateImage>
+</Containers>

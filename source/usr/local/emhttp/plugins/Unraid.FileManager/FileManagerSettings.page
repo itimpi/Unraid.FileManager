@@ -1,0 +1,107 @@
+Menu="FileManager:2"
+Title="FileManager Settings"
+Tag="gear"
+---
+<?PHP
+/* Copyright 2019, Dave Walker (itimpi).
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * Limetech is given expliit permission to use this code in any way they like.
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ */
+
+require_once '/usr/local/emhttp/webGui/include/Helpers.php';
+
+?>
+<?
+$version=parse_ini_file('/etc/unraid-version');
+if (substr($version['version'],0,3) < 6.7) echo "<p class='notice'>Requires Unraid 6.7 or later</p>";
+$diskp=parse_ini_file('/var/local/emhttp/disks.ini');
+?>
+
+<?
+function strip($area) {
+  return preg_replace(["/^|(\n)  /","/\n$/"],["$1",""],$area);
+}
+$fileDefaults = '/boot/config/plugins/Unraid.FileManager/FileManagerDefaults.cfg';
+$fileSettings = '/boot/config/plugins/Unraid.FileManager/FileManagerSettings.cfg';
+$default = file_get_contents($fileDefaults);
+$current = @file_get_contents($fileSettings) ?: $default;
+$current = preg_replace(["/\r\n/","/\r/","/\n$/"],["\n","\n",""],$current);
+$default = preg_replace(["/\r\n/","/\r/","/\n$/"],["\n","\n",""],$default);
+?>
+function setDefaults(form) {
+    alert('Settings reset to default settings');
+}
+
+$(document).ready(function(){
+  var oForm = document.getElementById('FileManager');
+  var ta = document.getElementById('FileManagerSettings');
+  var w = window.innerWidth;
+  var h = window.innerHeight;
+});
+
+</script>
+
+<form   markdown = "1"
+        id       = "FileManager"
+        method   = "POST" 
+        action   = "/update.php" 
+        target   = "progressFrame"
+        >
+        
+<input type="hidden" 
+       name="#file"    
+       value="<?=$fileSettings?>">
+<!--
+<input type="hidden" 
+       name="#command" 
+       value="/webGui/scripts/bootmode">
+<input type="hidden" 
+       name="#arg[1]" 
+       value="">
+<input type="hidden" 
+       name="text"
+       value="" >  --> 
+FileManager is a browser based File manager developed by <a href="http://www.gerd-tentler.de/tools/filemanager/">Gerd Tentler</a>.  It is highly configurable which has made it possible to integrate it into the Unraid GUI. The section below shows the full configuration file that is currently in use. The default settings issued with the plugin have been chosen to be appropriate for standard Unraid use but at the moment they are still being tuned for optimal values.
+<p>You can edit the entries below to try out the effects of different settings but take great care as the syntax is not checked and getting it wrong can stop the FileManager tab for displaying a list of files.</p>
+
+<input type="button"
+       value="Tefaults"
+       onclick="setdefaults(this.form)">  
+: <input type="submit" 
+          value="Apply">
+<input type="button" 
+          id="Done" 
+          value="Done"
+        onclick="done()"><a style='float:right' href='https://www.paypal.com/cgi-bin/webscr?cmd=xclick&amp;business=info@gerd-tentler.de&amp;item_name=FileManager&amp;no_shipping=1&amp;no_note=1&amp;&currency_code=EUR&amp;lc=US&amp;bn=PP-BugNowBF' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a>
+        
+> Click the **Default** button to initialize the edit box with the
+> default contents suppled with the plugin.  You still need to click **Apply** in order to
+> commit the change.
+>
+> Click the **Apply** button to commit the current edits.  Click **Reset** to
+> undo any changes you make (before Saving). Click **Done** to exit this page.
+
+<div markdown="1" class="advanced" style="box-sizing: border-box;">
+<center>
+<textarea class="raw" 
+            name="raw" 
+            spellcheck="false" 
+            cols="80" 
+            rows="<?=substr_count($current,"\n")+1?>" 
+            style="box-sizing:border-box;marge:0 auto;border-style:solid;border-width:3;padding:25;font-family:Courier;width:1200px">
+     <?=$current?>
+</textarea>
+</center>
+</div>
+<!-- 
+FileManager configuration:
+auto;border-style:solid;border-width:3;padding:25;font-family:Courier;width:1200px" 
+-->
+</form>

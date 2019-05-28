@@ -1,0 +1,86 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE PLUGIN [
+<!ENTITY name "Unraid.FileManager">
+<!ENTITY author "Dave Walker (itimpi)">
+<!ENTITY version "2019.05.28">
+<!ENTITY md5 "37005980336ec9d426998f8d08ffd75c">
+<!ENTITY launch "Settings/Scheduler">
+<!ENTITY plugin "Unraid.FileManager">
+<!ENTITY plugdir "/usr/local/emhttp/plugins/&name;">
+<!ENTITY github "itimpi/Unraid-File-Manager">
+<!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/master/&plugin;.plg">
+<!ENTITY emhttp "/usr/local/emhttp/plugins/&plugin;"
+]>
+<PLUGIN name="&name;" 
+	author="&author;" 
+	version="&version;" 
+	launch="Tools/FileManager" 
+	pluginURL="&pluginURL;" 
+	min="6.7"
+	icon="file"
+	support="https://lime-technology.com/forums/topic/78394-parity-check-tuning/">
+
+<CHANGES>
+### 2019-05-28 Early test version to test .plg file
+</CHANGES>
+
+<FILE Run="/bin/bash">
+  <INLINE>
+    # Remove old 'source' files
+      rm -f $(ls /boot/config/plugins/&plugin;/&plugin;*.txz 2&gt;/dev/null | grep -v '&version;')
+  </INLINE>
+</FILE>
+
+<FILE Name="/boot/config/plugins/&plugin;/filemanager.zip">
+<URL>http://www.gerd-tentler.de/tools/download.php?file=filemanager.zip</URL>
+  <INLINE>
+    # Unzip the files so they are ready for use
+    # (at the moment run from USB stick to save RAM - this may need revisiting if it impacts performance?)
+    /usr/bin/unzip /boot/config/plugins/&plugin;/filemanager.zip . 2&gt;/dev/null 
+  </INLINE>
+</FILE>
+<!--
+The 'source' file. 
+-->
+  <FILE Name="/boot/config/plugins/&plugin;/&plugin;-&version;.txz" Run="upgradepkg --install-new"> 
+    <!--  # Local URL for testing -->
+    <URL>/mnt/disks/192.168.0.250_Dropbox/Projects/Unraid-File-Manager/archives/&plugin;-&version;.txz</URL>
+    <!--  s gitHub URL for live deployment
+    <URL>https://raw.githubusercontent.com/&github;/master/archives/&plugin;-&version;.txz</URL>
+    -->
+  </FILE>
+<!--
+The 'post-install' script
+-->
+<FILE Run="/bin/bash">
+  <INLINE>
+    if [ -d ln -s /boot/config/plugins/&plugin;/filemanager ]; then 
+    	ln -s /boot/config/plugins/&plugin;/filemanager /usr/local/emhttp/webGui/filemanager
+    fi
+    if [ ! -f /boot/config/plugins/&plugin;/FileManagerSettings ]; then
+    	cp /usr/local/emhttp/plugins/&plugin;/FileManagerDefaults /boot/config/plugins/&plugin;/FilemanagerSettings
+    fi
+    echo ""
+    echo "----------------------------------------------------"
+    echo " &name; has ls ar	been installed."
+    echo " Copyright 2019, Dave Walker (itimpi)"
+    echo " Version: &version;"
+    echo "----------------------------------------------------"
+    echo ""
+  </INLINE>
+</FILE>
+
+<!--
+The 'remove' script.
+-->
+<FILE Run="/bin/bash" Method="remove">
+  <INLINE>
+    rm -f /usr/local/emhttp/webGui/filemanager
+    removepkg &plugin;-&version;
+    rm -rf &plugdir;
+    rm -rf /boot/config/plugins/&plugin;
+
+  </INLINE>
+</FILE>
+
+</PLUGIN>

@@ -1,0 +1,84 @@
+Menu="UNRAID-OS"
+Type="xmenu"
+Title="FileManager"
+Icon="file"
+Tabs="true"
+Tag="folder"
+---
+<?PHP
+/* Copyright 2019, Dave Walker (itimpi).
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * Limetech is given expliit permission to use this code in any way they like.
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ */
+
+require_once '/usr/local/emhttp/webGui/include/Helpers.php';
+
+?>
+<script>
+
+// Preset fields to be enabled/disabled as appropriate
+
+function presetFilemanager(form) {
+  // Handle the scheduled pause/resume options
+}
+
+
+$(document).ready(function(){
+  var oForm = document.getElementById('FileManager');
+  presetFileManager(oForm);
+});
+
+
+$(function() {
+  resize();
+  $(window).bind('resize',function(){resize();});
+});
+function resize() {
+  $('div.up').height(Math.max(window.innerHeight-320,330)).show();
+}
+</script>
+
+  <input type="radio" name="scope" value="drives"> Drives  <input type="radio" name="scope" value="user"> User Shares<br>
+<br>  
+  &nbsp; <!--  This is to have a dummy field so buttons are correctly aligned -->
+  <!--
+  : <input type="submit" 
+          name="#apply" 
+          value="Apply" 
+          id='Apply'>
+  -->
+  <input type="button" 
+          id="Done" 
+          value="Done"
+        onclick="done()"><a style='float:right' href='https://www.paypal.com/cgi-bin/webscr?cmd=xclick&amp;business=info@gerd-tentler.de&amp;item_name=FileManager&amp;no_shipping=1&amp;no_note=1&amp;&currency_code=EUR&amp;lc=US&amp;bn=PP-BugNowBF' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a>
+  <?
+  $fileSettings = '/boot/config/plugins/Unraid.Filemanager/FileManagerSettings.cfg';
+  $fileDefaults = '/boot/config/plugins/Unraid.Filemanager/FileManagerDefaults.cfg';
+  $fileCurrent  = '/usr/local/emhttp/webGui/filemanager/config.inc.php';
+  if (! file_exists($fileSettings)) {
+    copy($fileDefaults, $fileSettings);
+  }
+  // Ensure current settings are starting point for fileManager
+  copy ($fileSettings, $fileCurrent);
+  include_once('/usr/local/emhttp/webGui/filemanager/class/FileManager.php');
+  $FileManager = new FileManager();
+  // If we need to over-ride any default settings do it here!
+  ?>
+  <div markdown="0" style="height:600px;">
+  <table border="0" style="width:90%;"><tr>
+  <td align="center">
+
+  <?= $FileManager->create(); ?>
+  
+  </td>
+  </tr></table>
+
+  </div>
+
