@@ -60,14 +60,14 @@ function resize() {
         onclick="done()"><a style='float:right' href='https://www.paypal.com/cgi-bin/webscr?cmd=xclick&amp;business=info@gerd-tentler.de&amp;item_name=FileManager&amp;no_shipping=1&amp;no_note=1&amp;&currency_code=EUR&amp;lc=US&amp;bn=PP-BugNowBF' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a>
   <?
   $fileSettings = '/boot/config/plugins/Unraid.Filemanager/FileManagerSettings.cfg';
-  $fileDefaults = '/boot/config/plugins/Unraid.Filemanager/FileManagerDefaults.cfg';
-  $fileCurrent  = '/usr/local/emhttp/webGui/filemanager/config.inc.php';
+  $fileDefaults = '/usr/local/emhttp/plugins/Unraid.Filemanager/FileManagerDefaults.cfg';
+  $fileCurrent  = '/usr/local/emhttp/filemanager/config.inc.php';
   if (! file_exists($fileSettings)) {
     copy($fileDefaults, $fileSettings);
   }
   // Ensure current settings are starting point for fileManager
   copy ($fileSettings, $fileCurrent);
-  include_once('/usr/local/emhttp/webGui/filemanager/class/FileManager.php');
+  include_once('/usr/local/emhttp/filemanager/class/FileManager.php');
   $FileManager = new FileManager();
   // If we need to over-ride any default settings do it here!
   ?>
