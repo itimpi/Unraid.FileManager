@@ -3,7 +3,7 @@
 <!ENTITY name "Unraid.FileManager">
 <!ENTITY author "Dave Walker (itimpi)">
 <!ENTITY version "2019.05.28">
-<!ENTITY md5 "86891c2b227602c13cb517f207d45674">
+<!ENTITY md5 "d234b534bcd8ca28a28c7f1583f80f31">
 <!ENTITY launch "Settings/Scheduler">
 <!ENTITY plugin "Unraid.FileManager">
 <!ENTITY plugdir "/usr/local/emhttp/plugins/&name;">
@@ -43,7 +43,7 @@ The 'post-install' script
 <FILE Run="/bin/bash">
   <INLINE>
     # Unzip the files so they are ready for use
-    /usr/bin/unzip -d /usr/local/emhttp /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip 2&gt; /dev/null
+    /usr/bin/unzip -d /usr/local/emhttp /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip &amp;&gt; /dev/null
     # Remove zip from RAM as no longer needed
     rm -fr /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
     # Set defaults for new installs
@@ -59,7 +59,7 @@ The 'post-install' script
     echo "----------------------------------------------------"
     echo " &name; v&version; has been installed."
     echo " Unraid.FileManager plugin copyright 2019, Dave Walker (itimpi)"
-    echo " FileManager v10.50 copyright Gerd Tentler 2006"
+    echo " FileManager v10.50 copyright Gerd Tentler 2006-2019"
     echo "----------------------------------------------------"
     echo ""
   </INLINE>

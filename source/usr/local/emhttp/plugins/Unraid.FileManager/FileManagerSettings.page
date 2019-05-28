@@ -23,7 +23,7 @@ $version=parse_ini_file('/etc/unraid-version');
 if (substr($version['version'],0,3) < 6.7) echo "<p class='notice'>Requires Unraid 6.7 or later</p>";
 $diskp=parse_ini_file('/var/local/emhttp/disks.ini');
 ?>
-
+<script>
 <?
 function strip($area) {
   return preg_replace(["/^|(\n)  /","/\n$/"],["$1",""],$area);
