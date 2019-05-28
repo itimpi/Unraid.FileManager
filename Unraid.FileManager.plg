@@ -43,7 +43,7 @@ The 'post-install' script
 <FILE Run="/bin/bash">
   <INLINE>
     # Unzip the files so they are ready for use
-    /usr/bin/unzip -d /usr/local/emhttp /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip &amp;&gt; /dev/null
+    /usr/bin/unzip -d -q /usr/local/emhttp /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
     # Remove zip from RAM as no longer needed
     rm -fr /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
     # Set defaults for new installs
