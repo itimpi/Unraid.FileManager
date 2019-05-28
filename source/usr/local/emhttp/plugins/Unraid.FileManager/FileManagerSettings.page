@@ -28,7 +28,7 @@ $diskp=parse_ini_file('/var/local/emhttp/disks.ini');
 function strip($area) {
   return preg_replace(["/^|(\n)  /","/\n$/"],["$1",""],$area);
 }
-$fileDefaults = '/boot/config/plugins/Unraid.FileManager/FileManagerDefaults.cfg';
+$fileDefaults = '/usr/local/emhttp/plugins/Unraid.FileManager/FileManagerDefaults.cfg';
 $fileSettings = '/boot/config/plugins/Unraid.FileManager/FileManagerSettings.cfg';
 $default = file_get_contents($fileDefaults);
 $current = @file_get_contents($fileSettings) ?: $default;
