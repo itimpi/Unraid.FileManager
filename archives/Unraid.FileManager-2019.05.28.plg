@@ -31,10 +31,6 @@
   </INLINE>
 </FILE>
 
-<FILE Name="/boot/config/plugins/&plugin;/filemanager.zip">
-<URL>http://www.gerd-tentler.de/tools/download.php?file=filemanager.zip</URL>
-</FILE>
-
 <!--
 The 'source' file. 
 -->
@@ -46,25 +42,13 @@ The 'post-install' script
 -->
 <FILE Run="/bin/bash">
   <INLINE>
-    if [ -d /boot/config/plugins/&plugin;/filemanager ]; then
-        # Unzip the files so they are ready for use
-    	/usr/bin/unzip /boot/config/plugins/&plugin;/filemanager.zip . 2&gt;/dev/null 
-    fi
-    # (at the moment run from USB stick to save RAM - this may need revisiting if it impacts performance?)
-    if [ -d /boot/config/plugins/&plugin;/filemanager ]; then 
-    	ln -s /boot/config/plugins/&plugin;/filemanager /usr/local/emhttp/webGui/filemanager
-    else
-	echo ""
-	echo "----------------------------------------------------"
-	echo " ERROR:  failure to unzip filemanager files"
-	echo "----------------------------------------------------"
-	echo ""
-    fi
-    # set defaults for new installs
+    # Unzip the files so they are ready for use
+    /usr/bin/unzip -d /usr/local/emhttp /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
+    # Set defaults for new installs
     if [ ! -f /boot/config/plugins/&plugin;/FileManagerSettings.cfg ]; then
     	cp /usr/local/emhttp/plugins/&plugin;/FileManagerDefaults.cfg /boot/config/plugins/&plugin;/FileManagerSettings.cfg
     fi
-    # create filemanager temp folder
+    # Create filemanager temp folder
     if [ ! -d /tmp/filemanager ]; then
     	mkdir /tmp/filemanager
     	chmod 777 /tmp/filemanager
