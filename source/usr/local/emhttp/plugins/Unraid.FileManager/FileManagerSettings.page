@@ -49,7 +49,7 @@ $(document).ready(function(){
 </script>
 
 <form   markdown = "1"
-        id       = "FileManager"
+        id       = "FileManagerSettings"
         method   = "POST" 
         action   = "/update.php" 
         target   = "progressFrame"

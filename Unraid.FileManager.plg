@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name "Unraid.FileManager">
 <!ENTITY author "Dave Walker (itimpi)">
-<!ENTITY version "2019.05.28">
-<!ENTITY md5 "090c529a1c199cc5bff4c94460b0bb81">
+<!ENTITY version "2019.05.31">
+<!ENTITY md5 "a5d1edeb6a3556c7bc67bee54005d876">
 <!ENTITY launch "Settings/Scheduler">
 <!ENTITY plugin "Unraid.FileManager">
 <!ENTITY plugdir "/usr/local/emhttp/plugins/&name;">
@@ -21,7 +21,7 @@
 	support="https://lime-technology.com/forums/topic/78394-parity-check-tuning/">
 
 <CHANGES>
-### 2019-05-28 Early test version to test .plg file
+### 2019-05-31 Early test version to test .plg file
 </CHANGES>
 
 <FILE Run="/bin/bash">
@@ -43,7 +43,8 @@ The 'post-install' script
 <FILE Run="/bin/bash">
   <INLINE>
     # Unzip the files so they are ready for use
-    /usr/bin/unzip -d /usr/local/emhttp /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
+ls
+/usr/bin/unzip -d /usr/local/emhttp /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
     # Remove zip from RAM as no longer needed
     rm -fr /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
     # Set defaults for new installs
