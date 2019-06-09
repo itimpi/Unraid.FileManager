@@ -132,7 +132,7 @@ switch ($argv[1]) {
         break;
         
     default:
-        $cmd = "plugin " . $mthd . ' ' . $cwd . $plugin . ".plg" . $forced;
+        $cmd = "plugin $mthd " . ($argv[1] == "install" ? "$cwd/" : "" ) . "$pluginName.plg$forced";
         echo "INFO:  $cmd\n";
         system ($cmd, $retval);
         echo "\nReturn value: $retval\n";

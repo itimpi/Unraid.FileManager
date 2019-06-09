@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name "Unraid.FileManager">
 <!ENTITY author "Dave Walker (itimpi)">
-<!ENTITY version "2019.05.31">
-<!ENTITY md5 "a5d1edeb6a3556c7bc67bee54005d876">
+<!ENTITY version "2019.06.09">
+<!ENTITY md5 "7ab5e84b744f5a753142bb85713445cc">
 <!ENTITY launch "Settings/Scheduler">
 <!ENTITY plugin "Unraid.FileManager">
 <!ENTITY plugdir "/usr/local/emhttp/plugins/&name;">
@@ -21,7 +21,7 @@
 	support="https://lime-technology.com/forums/topic/78394-parity-check-tuning/">
 
 <CHANGES>
-### 2019-05-31 Early test version to test .plg file
+### 2019-06-09 Early test version for testing purposes only
 </CHANGES>
 
 <FILE Run="/bin/bash">
@@ -43,9 +43,8 @@ The 'post-install' script
 <FILE Run="/bin/bash">
   <INLINE>
     # Unzip the files so they are ready for use
-ls
-/usr/bin/unzip -d /usr/local/emhttp /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
-    # Remove zip from RAM as no longer needed
+    /usr/bin/unzip -q -d /usr/local/emhttp /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
+    # Remove zip from RAM as no longls er needed
     rm -fr /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
     # Set defaults for new installs
     if [ ! -f /boot/config/plugins/&plugin;/FileManagerSettings.cfg ]; then
@@ -71,11 +70,11 @@ The 'remove' script.
 -->
 <FILE Run="/bin/bash" Method="remove">
   <INLINE>
-    rm -f /usr/local/emhttp/webGui/filemanager
     removepkg &plugin;-&version;
     rm -rf &plugdir;
     rm -rf /boot/config/plugins/&plugin;
     rm -rf /tmp/filemanager
+    rm -rf /usr/local/emhttp/filemanager
   </INLINE>
 </FILE>
 

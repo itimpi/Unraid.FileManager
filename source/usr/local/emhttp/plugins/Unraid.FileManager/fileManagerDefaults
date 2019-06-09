@@ -36,11 +36,11 @@ dateTimeFormat = "%Y-%m-%d %H:%M:%S"
 
 ; FileManager's data directory (file path, example for local mode: /home/users/gerry/htdocs/files)
 ; NOTE: must be an absolute path in local mode and a relative path in FTP mode
-rootDir = "/mnt/user"
+rootDir = "/mnt"
 
 ; open this directory by default (file path, example: "files/images"
 ; NOTE: this path is relative to FileManager's data directory
-defaultDir = ""
+defaultDir = "user"
 
 ; only view these directories; example: "www,uploads" - leave empty to view all directories
 ; NOTE: this will only work within FileManager's data directory
@@ -74,10 +74,10 @@ fmMargin = 0
 fmView = "details"
 
 ; prefix for containers, session and cookie variables
-fmPrefix = "fmgr"
+fmPrefix = "fm"
 
 ; FileManager caption in title bar - will replace system type
-fmCaption = "FileManager"
+fmCaption = "tower"
 
 ; hide disabled icons
 hideDisabledIcons = no
@@ -105,7 +105,7 @@ tmpFilePath = "/tmp/filemanager"
 customAction = "{caption: '', action: ''}"
 
 ; only for development: view debug info messages
-debugInfo = yes
+debugInfo = no
 
 [explorer]
 

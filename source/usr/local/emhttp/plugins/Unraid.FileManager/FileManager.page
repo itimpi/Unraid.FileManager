@@ -18,70 +18,59 @@ Tag="folder"
  * all copies or substantial portions of the Software.
  */
 
-require_once '/usr/local/emhttp/webGui/include/Helpers.php';
-
+require_once '/usr/local/emhttp/plugins/Unraid.FileManager/fileManagerHelpers.php';
 ?>
 <script>
 
 // Preset fields to be enabled/disabled as appropriate
 
 function presetFilemanager(form) {
-  // Handle the scheduled pause/resume options
 }
 
+function startFM() {
+    alert ('startFM');
+}
 
-$(document).ready(function(){
+// Document Ready function
+$(function() {
+  if ( typeof caPluginUpdateCheck === "function" ) {
+    caPluginUpdateCheck("Unraid.FileManager",{name:"Unraid FileManager",element:".pluginUpdate"});
+  }
   var oForm = document.getElementById('FileManager');
   presetFileManager(oForm);
-});
-
-
-$(function() {
   resize();
   $(window).bind('resize',function(){resize();});
 });
-function resize() {
-  $('div.up').height(Math.max(window.innerHeight-320,330)).show();
-}
-</script>
-<form   markdown = "1"
-        id       = "FileManager"
-        method   = "POST" 
-        action   = "/update.php" 
-        target   = "progressFrame"
-        >
- <div class='pluginUpdate'></div>
 
-  &nbsp; <!--  This is to have a dummy field so buttons are correctly aligned -->
-  <!--
-  : <input type="submit" 
-          name="#apply" 
-          value="Apply" 
-          id='Apply'>
-  -->
-  <input type="button" 
-          id="Done" 
-          value="Done"
-        onclick="done()"><a style='float:right' href='https://www.paypal.com/cgi-bin/webscr?cmd=xclick&amp;business=info@gerd-tentler.de&amp;item_name=FileManager&amp;no_shipping=1&amp;no_note=1&amp;&currency_code=EUR&amp;lc=US&amp;bn=PP-BugNowBF' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a>
- </form>
- <input type="radio" name="scope" value="drives"> Drives  <input type="radio" name="scope" value="user"> User Shares<br>
-<br>  
+function resize() {
+  $('#fmArea').height(Math.max(window.innerHeight-320,330)).show();
+}
+
+function userShares() {
+}
+
+function onlyDrives() {
+}
+
+</script>
+
+<div class='pluginUpdate'></div>
+
+<input type="radio" name="scope" value="drives" onclick="onlyDrives()"> Drives  <input type="radio" name="scope" value="user" onclick="onlyDrives"> User Shares<br>         
+: <input type="button" id="Done" value="Done" onclick="done()">
+<a style='float:right' href='https://www.paypal.com/cgi-bin/webscr?cmd=xclick&amp;business=info@gerd-tentler.de&amp;item_name=FileManager&amp;no_shipping=1&amp;no_note=1&amp;&currency_code=EUR&amp;lc=US&amp;bn=PP-BugNowBF' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a>
+
+ 
   <?
-  $fileSettings = '/boot/config/plugins/Unraid.Filemanager/FileManagerSettings.cfg';
-  $fileDefaults = '/usr/local/emhttp/plugins/Unraid.Filemanager/FileManagerDefaults.cfg';
-  $fileCurrent  = '/usr/local/emhttp/filemanager/config.inc.php';
-  if (! file_exists($fileSettings)) {
-    copy($fileDefaults, $fileSettings);
-  }
-  // Ensure current settings are starting point for fileManager
-  copy ($fileSettings, $fileCurrent);
-  <!--
   include_once('/usr/local/emhttp/filemanager/class/FileManager.php');
   $FileManager = new FileManager();
   // If we need to over-ride any default settings do it here!
+  $FileManager->fmgrWebPath = '../../filemanager';
+  $FileManager->fmgrCaption = 'tower';
   ?>
-  <div markdown="0" style="height:600px;">
-  <table border="0" style="width:90%;"><tr>
+
+  <div markdown="0" id="fmArea" style="height:900px;">
+  <table border="0" style="width:90%;height=50%"><tr>
   <td align="center">
 
   <?= $FileManager->create(); ?>
@@ -91,4 +80,3 @@ function resize() {
 
   </div>
   -->
-
