@@ -1,16 +1,17 @@
 #!/usr/bin/php
 <?PHP
 /*
- * Script that is used during testing to help with testing a .plg file
- * before it is committed to gitHub.
+ * Script that is used during testing to help with testing a .plg plugin
+ * file before it is committed to gitHub.
  *
  * It acts as a wrapper for the Unraid built-in 'plugin' command that
- * needs a full path to the .plg file when testing a local copy.  It
- * also carries out rome fudimentary checks.
+ * needs a full path to the .plg file when testing a local copy.  It also
+ * carries out some rudimentary checks on the file being valid XML.
  *
+ * It can also (optionally) check that an associated CA template is at least valid XML.
  * Assumpions:
- * - Plugin file is located in the current folder an has a name ot sne form <plugin-name>.plg
- * - CA template (if being used is also in current folder named ar <plugin-name>.xml
+ * - Plugin file is located in the current folder with a name of the form <plugin-name>.plg
+ * - CA template (if being used) is also in current folder named as <plugin-name>.xml
  *
  * Copyright 2019, Dave Walker (itimpi).
  *
@@ -23,10 +24,12 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  */
- 
+
+$cwd = __DIR__;
+
 function usage() {
-    echo "\nUsage:\n";
-    echo "  $script method\n";
+    echo "Usage:\n";
+    echo "  " . basename(__FILE__) . " method\n";
     echo "where method is one of:\n";
     echo "  validate   only do simple XML valdation of .plg and (if present) .xml files\n";
     echo "  install    normal install of plugin\n";
@@ -34,7 +37,7 @@ function usage() {
     echo "  remove     remove plugin\n";
     echo "  check      check plugin\n";
     echo "  update     update plugin\n";
-    echo "  template   test CA template For the plugin\n\n";
+    echo "  template   install CA template for the plugin\n\n";
 }
 
 if ($argc != 2) {
@@ -43,28 +46,27 @@ if ($argc != 2) {
     exit (1);
 }
 
-switch ($argv[1]) {
-    case "validate":
-    case "install":
-    case "remove";
-    case "updane";
-    case "check";
-        $mthd = $argv[1];
-        $forced = "";
+$mthd = $argv[1];
+switch ($mthd) {
+    case 'validate':
+    case 'install':
+    case 'remove':
+    case 'update':
+    case 'check':
+    case 'template':
+        $forced = '';
         break;
-    
-    case "forced":
-        $mthd = "install";
-        $forced = "forced";
-    
+
+    case 'forced':
+        $mthd = 'install';
+        $forced = ' forced';
+        break;
+
     default:
         usage();
         exit (2);
-        
-}
 
-$script = basename(__FILE__); 
-$cwd = dirname(__FILE__);
+}
 
 // Use .plg file to derive plugin name
 
@@ -124,13 +126,13 @@ if (empty($files)) {
 switch ($argv[1]) {
     case "validate":
         break;
-        
+
     case "template":
         @mkdir ("/boot/config/plugins/dockerMan/templates-user/");
         copy ("$cwd/templateFile", "/boot/config/plugins/dockerMan/templates-user/$templateFile");
         echo "INFO; CA Template installed so can be tested from Apps tab\n";
         break;
-        
+
     default:
         $cmd = "plugin $mthd " . ($argv[1] == "install" ? "$cwd/" : "" ) . "$pluginName.plg$forced";
         echo "INFO:  $cmd\n";

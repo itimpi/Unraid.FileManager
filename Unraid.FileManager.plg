@@ -10,6 +10,7 @@
 <!ENTITY github "itimpi/Unraid-File-Manager">
 <!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/master/&plugin;.plg">
 <!ENTITY emhttp "/usr/local/emhttp/plugins/&plugin;">
+<!ENTITY downloadURL "http://www.gerd-tentler.de/tools/download.php&#63;file=filemanager.zip">
 ]>
 <PLUGIN name="&name;" 
 	author="&author;" 
@@ -18,7 +19,7 @@
 	pluginURL="&pluginURL;" 
 	min="6.7"
 	icon="file"
-	support="https://lime-technology.com/forums/topic/78394-parity-check-tuning/">
+	support="https://lime-technology.com/forums/topic/TBD/">
 
 <CHANGES>
 ### 2019-06-09 Early test version for testing purposes only
@@ -30,7 +31,12 @@
       rm -f $(ls /boot/config/plugins/&plugin;/&plugin;*.txz 2&gt;/dev/null | grep -v '&version;')
   </INLINE>
 </FILE>
-
+<!--
+The FileManager binaries
+-->
+  <FILE Name="/boot/config/plugins/&plugin;/filemanager_10.50.zip"> 
+    <URL>https://raw.githubusercontent.com/&github;/master/archives/filemanager_10.50.zip</URL> 
+  </FILE>
 <!--
 The 'source' file. 
 -->
@@ -43,9 +49,7 @@ The 'post-install' script
 <FILE Run="/bin/bash">
   <INLINE>
     # Unzip the files so they are ready for use
-    /usr/bin/unzip -q -d /usr/local/emhttp /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
-    # Remove zip from RAM as no longls er needed
-    rm -fr /usr/local/emhttp/plugins/&plugin;/filemanager_10.50.zip
+    /usr/bin/unzip -q -d /usr/local/emhttp /boot/config/plugins/&plugin;/filemanager_10.50.zip
     # Set defaults for new installs
     if [ ! -f /boot/config/plugins/&plugin;/FileManagerSettings.cfg ]; then
     	cp /usr/local/emhttp/plugins/&plugin;/FileManagerDefaults.cfg /boot/config/plugins/&plugin;/FileManagerSettings.cfg
