@@ -41,6 +41,7 @@ The FileManager binaries
 The 'source' file. 
 -->
   <FILE Name="/boot/config/plugins/&plugin;/&plugin;-&version;.txz" Run="upgradepkg --install-new"> 
+    <!--      <URL>/mnt/cache/Dropbox/Projects/&plugin;/archives/&plugin;-&version;.txz</URL>
     <URL>https://raw.githubusercontent.com/&github;/master/archives/&plugin;-&version;.txz</URL> 
   </FILE>
 <!--
@@ -51,8 +52,8 @@ The 'post-install' script
     # Unzip the files so they are ready for use
     /usr/bin/unzip -q -d /usr/local/emhttp /boot/config/plugins/&plugin;/filemanager_10.50.zip
     # Set defaults for new installs
-    if [ ! -f /boot/config/plugins/&plugin;/FileManagerSettings.cfg ]; then
-    	cp /usr/local/emhttp/plugins/&plugin;/FileManagerDefaults.cfg /boot/config/plugins/&plugin;/FileManagerSettings.cfg
+    if [ ! -f /boot/config/plugins/&plugin;/fileManagerSettings.cfg ]; then
+    	cp /usr/local/emhttp/plugins/&plugin;/fileManagerDefaults.cfg /boot/config/plugins/&plugin;/fileManagerSettings.cfg
     fi
     # Create filemanager temp folder
     if [ ! -d /tmp/filemanager ]; then
