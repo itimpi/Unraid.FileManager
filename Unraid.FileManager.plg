@@ -41,8 +41,10 @@ The FileManager binaries
 The 'source' file. 
 -->
   <FILE Name="/boot/config/plugins/&plugin;/&plugin;-&version;.txz" Run="upgradepkg --install-new"> 
-    <!--      <URL>/mnt/cache/Dropbox/Projects/&plugin;/archives/&plugin;-&version;.txz</URL>
-    <URL>https://raw.githubusercontent.com/&github;/master/archives/&plugin;-&version;.txz</URL> 
+    <!--          URL to use when testing locally witnout committing to gitHub           -->
+    <!-- <URL>file://mnt/cache/Dropbox/Projects/&plugin;/archives/&plugin;-&version;.txz</URL> -->
+    <!--          URL to use when live deployment after committing to gitHub             -->
+    <URL>https://raw.githubusercontent.com/&github;/master/archives/&plugin;-&version;.txz</URL>
   </FILE>
 <!--
 The 'post-install' script
