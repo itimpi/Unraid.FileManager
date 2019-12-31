@@ -63,6 +63,7 @@ function onlyDrives() {
  
   <?
   include_once('/usr/local/emhttp/filemanager/class/FileManager.php');
+  $FineManager = null;		// ensure we destroy any exiting FileManager object
   $FileManager = new FileManager();
   // If we need to over-ride any default settings do it here!
   $FileManager->fmgrWebPath = '../../filemanager';

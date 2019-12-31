@@ -14,14 +14,14 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  */
- 
+
 $plugin="Unraid.FileManager";
 
 // current script directory
 $cwd = dirname(__FILE__);
 chdir ($cwd);
 
-// Ensure permissions are correct for runtime use 
+// Ensure permissions are correct for runtime use
 exec ("chown -R root *");
 exec ("chgrp -R root *");
 chdir ("$cwd/source");
@@ -43,7 +43,7 @@ echo "\nMD5: $md5\n";
 $handle = fopen ("$pkg.md5", 'w');
 fwrite ($handle, strtok($md5," "));
 fclose ($handle);
-if ( !is_dir("archives" )) mkdir("archives" );      
+if ( !is_dir("archives" )) mkdir("archives" );
 copy("$pkg.txz", "archives/$pkg.txz");
 copy("$pkg.md5", "archives/$pkg.md5");
 unlink("$pkg.txz");
@@ -57,7 +57,7 @@ echo "\nPLG\n";
 if (! file_exists("$plugin.plg")) {
     echo "INFO: Could not find $plugin.plg\n";
     return;
-} 
+}
 
 $in = file("$plugin.plg");
 $out = fopen("$plugin.plg.tmp", 'w');
@@ -74,11 +74,11 @@ foreach ($in as $inl)
         fputs ($out, $inl);
     }
 }
-copy ("$plugin.plg", "archives/$plugin-$ver.plg");
 unlink ("$plugin.plg");
 rename ("$plugin.plg.tmp", "$plugin.plg");
+copy ("$plugin.plg", "archives/$plugin-$ver.plg");
 
-// Ensure permissions are OK for public network access 
+// Ensure permissions are OK for public network access
 exec ("chown -R nobody *");
 exec ("chgrp -R users *");
 

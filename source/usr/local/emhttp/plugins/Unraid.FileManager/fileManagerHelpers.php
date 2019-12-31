@@ -2,18 +2,18 @@
 /*
  * Script that is run to carry out support tasks for the Unraid.FileManager plugin.
  *
- * Copyright 2019, Dave Walker (itimpi).
+ * Copyright 2019-2020, Dave Walker (itimpi).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
  *
- * Limetech is given expliit permission to use this code in any way they like.
+ * Limetech is given explicit permission to use this code in any way they like.
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  */
- 
+
 require_once '/usr/local/emhttp/webGui/include/Helpers.php';
 
 $version=parse_ini_file('/etc/unraid-version');
@@ -23,7 +23,7 @@ $plugin = 'Unraid.FileManager';
 $dirBoot = "/boot/config/plugins/$plugin";
 $dirRam = "/usr/local/emhttp/plugins/$plugin";
 $fileSettings = "$dirBoot/fileManagerSettings.cfg";
-$fileDefaults = "$dirRam/fileManagerDefaults";
+$fileDefaults = "$dirRam/fileManagerDefaults.cfg";
 // INFO:    Not sure why but this needs to be relative to /Tools/FileManager
 $filePhp      = "../../plugins/$plugin/fileManagerSettings.php";
 $fileCurrent  = '/usr/local/emhttp/filemanager/config.inc.php';
@@ -51,6 +51,8 @@ function fileManagerLoggerDebug($string) {
     // ***** Comment out next line if debug logging not required *****
     fileManagerLogger("DEBUG: " . $string);
 }
+
+// Useful comparison functions
 
 function startsWith($haystack, $beginning, $caseInsensitivity = false){
     if ($caseInsensitivity)

@@ -3,7 +3,7 @@
 <!ENTITY name "Unraid.FileManager">
 <!ENTITY author "Dave Walker (itimpi)">
 <!ENTITY version "2019.12.31">
-<!ENTITY md5 "5372ee8abc61b328fad9a3abc04a2a39">
+<!ENTITY md5 "906c183a339d469c0f895d026099a560">
 <!ENTITY launch "Settings/Scheduler">
 <!ENTITY plugin "Unraid.FileManager">
 <!ENTITY plugdir "/usr/local/emhttp/plugins/&name;">
@@ -60,12 +60,11 @@ The 'post-install' script
     	chmod 777 /tmp/filemanager
     fi
     echo ""
-    echo "----------------------------------------------------"
+    echo "---------------------------------------------------------------"
     echo " &name; v&version; has been installed."
     echo " FileManager v10.50 copyright Gerd Tentler 2006-2019"
     echo " Unraid.FileManager plugin copyright 2019, Dave Walker (itimpi)"
-
-    echo "----------------------------------------------------"
+    echo "---------------------------------------------------------------"
     echo ""
   </INLINE>
 </FILE>
