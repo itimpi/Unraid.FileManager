@@ -16,7 +16,16 @@ Tag="gear"
  */
 
 require_once '/usr/local/emhttp/plugins/Unraid.FileManager/fileManagerHelpers.php';
+
+// Multi-language support
+$plugin = 'Unraid.FileManager';
+$translations = file_exists("$docroot/webGui/include/Translations.php");
+require_once "$docroot/plugins/$plugin/Legacy.php";
 ?>
+<?if (!$translations):?>
+<?eval('?>'.parse_file("$docroot/plugins/$plugin/FileManagerSettings.page"))?>
+<?else:?>
+
 <script>
 
 function contactServer(op,msg) {
@@ -47,16 +56,16 @@ function madeEdit() {
 }
 
 function undoEdit() {
-    contactServer('undo', 'Reverted to last Saved Settings');
+    contactServer('undo', _('Reverted to last Saved Settings'));
 }
 
 function loadDefaults() {
-    contactServer('defaults', 'Settings reset to defaults');
+    contactServer('defaults', _('Settings reset to defaults'));
     $("#btnApply").prop("disabled",false);
 }
 
 function saveSettings() {
-    contactServer('save', 'New settings saved');
+    contactServer('save', _('New settings saved'));
 }
 
 function resetSettingsForm() {
@@ -69,18 +78,60 @@ function resetSettingsForm() {
 
 </script>
 
-FileManager is a browser based File manager developed by <a href="http://www.gerd-tentler.de/tools/filemanager/">Gerd Tentler</a>.  It is highly configurable which has made it possible to integrate it into the Unraid GUI. The section below shows the full configuration file that is currently in use. The default settings issued with the plugin have been chosen to be appropriate for standard Unraid use but at the moment they are still being tuned for optimal values.
-<p>You can edit the entries below to try out the effects of different settings but take great care as the syntax is not checked and getting it wrong can stop the FileManager tab from displaying a list of files.</p>
+_(FileManager is a browser based File manager developed by)_ <a href="http://www.gerd-tentler.de/tools/filemanager/">Gerd Tentler</a>.  _(It is highly configurable which has made it possible to integrate it into the Unraid GUI)_. 
 
-<input  type="button" id="btnDefaults" value="Defaults" onclick="loadDefaults()">
-: <input type="button"  id="btnApply" value="Apply" onclick="saveSettings()" disabled>
-<input type="button" id="btnReset" value="Reset" onclick="undoEdit()", style="display:none">
-<input type="button" id="btnDone" value="Done" onclick="done()">
-<a style='float:right' href='https://www.paypal.com/cgi-bin/webscr?cmd=xclick&amp;business=info@gerd-tentler.de&amp;item_name=FileManager&amp;no_shipping=1&amp;no_note=1&amp;&currency_code=EUR&amp;lc=US&amp;bn=PP-BugNowBF' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a>
+<!--
+Language Code:
+: <select name="languages" 
+          size='1' class='narrow' 
+          onClick="setLanguage(this.form)"
+          onBlur="setLanguage(this.form)"
+          onChange="setLanguage(this.form)">
+    
+     $langCodes[] = {'en', 'bg', 'he', 'pl', 'tr'};
+     for each $lang in $langCodes {
+       echo mk_option("", $lang, $lang) . "\n"
+     }
+
+     // lang_ca.inc  lang_es.inc  lang_hu.inc  lang_pt-BR.inc  lang_zh-Hans.inc
+     // lang_cs.inc  lang_et.inc  lang_it.inc  lang_pt.inc     lang_zh-TW.inc
+     // lang_da.inc  lang_fa.inc  lang_lv.inc  lang_ro.inc
+     // lang_de.inc  lang_fi.inc  lang_nl.inc  lang_ru.inc
+     // lang_el.inc  lang_fr.inc  lang_no.inc  lang_sv.inc
+  </select>
+ -->
+ 
+The section below shows the full configuration file that is currently in use. The default settings issued with the plugin have been chosen to be appropriate for standard Unraid use but at the moment they are still being tuned for optimal values.
+<p>You can edit the entries below to try out the effects of different settings but take great care as the syntax is not checked and getting it wrong can stop the FileManager tab from displaying a list of files.  When you press Apply then the settings below are stored on the flash drive in the <?=$fileSettings?> file</p>
+
+<input  type="button" 
+        id="btnDefaults" 
+        value="FileManager Default Settings" 
+        onclick="loadDefaults()">
+<input  type="button" 
+        id="btnUnraid" 
+        value="Unraid Settings" 
+        onclick="loadUnraid()">
+<input type="button"  
+        id="btnApply" 
+        value="Apply" 
+        onclick="saveSettings()" disabled> 
+<input type="button" 
+        id="btnReset"  
+        value="Reset" 
+        onclick="undoEdit()" 
+        style="display:none">
+<input type="button" 
+        id="btnDone" 
+        value="Done" 
+        onclick="done()">
+<a style='float:right' href='https://www.paypal.com/cgi-bin/webscr?cmd=xclick&amp;business=info@gerd-tentler.de&amp;item_name=FileManager&amp;no_shipping=1&amp;no_note=1&amp;&currency_code=EUR&amp;lc=US&amp;bn=PP-BugNowBF' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" title="Donate to FileManager author"></a>
+<a style='float:right' href='https://www.paypal.com/cgi-bin/webscr?cmd=xclick&amp;business=info@gerd-tentler.de&amp;item_name=FileManager&amp;no_shipping=1&amp;no_note=1&amp;&currency_code=EUR&amp;lc=US&amp;bn=PP-BugNowBF' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" title="Donate to Unraid plugin author"></a>
        
-> Click the **Defaults** button to initialize the edit box with the default contents
-> suppled with the plugin.  You still need to click **Apply** in order to commit any
-> changes.
+> Click the **Defaults** button to initialize the edit box with the default contents supplied with the plugin.
+> You cannot save these settings as they are not suitable for use with Unraid, but are useful to see the porribilities.
+>
+> Click the **Unraid Settings** button to load the current Unraid settings.  
 >
 > Click the **Apply** button to commit the current edits.  Click **Reset** to
 > undo any changes you make (before saving). Click **Done** to exit this page.
@@ -99,3 +150,4 @@ FileManager is a browser based File manager developed by <a href="http://www.ger
 </textarea>
 </center>
 </div>
+<?endif;?>

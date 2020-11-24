@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/php
+<?PHP
 # Script to copy package files into their final position in the unRAID runtime path.
 # This can be run if the plugin is already installed without having to build the
 # package or commit any changes to gitHub.   Make testing increments easier.
@@ -14,12 +15,39 @@
 #
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
+#
 
-PLUGIN="Unraid.FileManager"
-echo "copying files from 'source' to runtime position"
-cp -v -r source/* / &>/dev/null
-chown -R root /usr/local/emhttp/plugins/$PLUGIN/*
-chgrp -R root /usr/local/emhttp/plugins/$PLUGIN/*
-chmod -R 755 /usr/local/emhttp/plugins/$PLUGIN/*
-date
-echo "files copied "
+// Use .plg file to derive plugin name
+
+$cwd = dirname(__FILE__);
+chdir ($cwd);
+$files = glob("$cwd/*.plg");
+if (empty($files)) {
+    echo "ERROR:  Unable to find any .plg files in current directory\n";
+    exit(1);
+} elseif (count($files) != 1 ) {
+    echo "ERROR;  More than 1 .plg file in current directory\n";
+    echo $files;
+    exit(1);
+} else {
+    $plugin = preg_replace('/\\.[^.\\s]{3,4}$/', '', basename($files[0]));;
+    echo "\nPLUGIN: $plugin\n";
+}
+
+// Check that the plugin has actually been installed
+// If not create its working folder on the flash drive
+
+if (!is_dir("/boot/config/plugins/$plugin")) {
+    echo "\nERROR: $plugin is not currently installed\n";
+    exit (-1);
+}
+
+
+echo "copying files from 'source' to runtime position\n";
+system ("cp -v -r -u source/* /");
+system ("chown -R root /usr/local/emhttp/plugins/$plugin/*");
+system ("chgrp -R root /usr/local/emhttp/plugins/$plugin/*");
+system ("chmod -R 755 /usr/local/emhttp/plugins/$plugin/*");
+system ("date");
+echo "files copied\n\n";
+?>

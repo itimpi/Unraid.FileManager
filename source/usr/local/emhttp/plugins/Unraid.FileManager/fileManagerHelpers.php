@@ -14,10 +14,10 @@
  * all copies or substantial portions of the Software.
  */
 
-require_once '/usr/local/emhttp/webGui/include/Helpers.php';
+// useful for testing outside Gui
+$docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 
-$version=parse_ini_file('/etc/unraid-version');
-if (substr($version['version'],0,3) < 6.7) echo "<p class='notice'>Requires Unraid 6.7 or later</p>";
+require_once '/usr/local/emhttp/webGui/include/Helpers.php';
 
 $plugin = 'Unraid.FileManager';
 $dirBoot = "/boot/config/plugins/$plugin";
@@ -25,8 +25,9 @@ $dirRam = "/usr/local/emhttp/plugins/$plugin";
 $fileSettings = "$dirBoot/fileManagerSettings.cfg";
 $fileDefaults = "$dirRam/fileManagerDefaults.cfg";
 // INFO:    Not sure why but this needs to be relative to /Tools/FileManager
-$filePhp      = "../../plugins/$plugin/fileManagerSettings.php";
+$filePhp      = "$dirRam/plugins/$plugin/fileManagerSettings.php";
 $fileCurrent  = '/usr/local/emhttp/filemanager/config.inc.php';
+$var = parse_ini_file('/var/local/emhttp/var.ini');
 
 if (! file_exists($fileSettings))  {
     copy($fileDefaults, $fileSettings);
@@ -42,6 +43,7 @@ copy ($fileSettings, $fileCurrent);
 
 # Write message to syslog
 function fileManagerLogger($string) {
+  global $argv;
   $string = str_replace("'","",$string);
   shell_exec('logger -t "FileManager" "' . $string . '"');
 }
@@ -50,6 +52,50 @@ function fileManagerLogger($string) {
 function fileManagerLoggerDebug($string) {
     // ***** Comment out next line if debug logging not required *****
     fileManagerLogger("DEBUG: " . $string);
+}
+
+# Write message to syslog if testing logging active
+function fileManagerLoggerTesting($string) {
+    // ***** Comment out next line if testing logging not required *****
+    fileManagerLogger("TESTING: " . $string);
+}
+
+/**
+ * Create an ini string suitable for writing to a configuration file
+ *
+ * @param array  $array
+ * @return string or bool
+ */
+function create_ini_string($array = []) {
+	// check argument is array
+	if (!is_array($array)) {
+		throw new \InvalidArgumentException('Function argument must be an array.');
+	}
+	// process array
+	$data = array();
+	foreach ($array as $key => $val) {
+		if (is_array($val)) {
+			$data[] = "[$key]";
+			foreach ($val as $skey => $sval) {
+				if (is_array($sval)) {
+					foreach ($sval as $_skey => $_sval) {
+						if (is_numeric($_skey)) {
+							$data[] = $skey.'[] = '.(is_numeric($_sval) ? $_sval : (ctype_upper($_sval) ? $_sval : '"'.$_sval.'"'));
+						} else {
+							$data[] = $skey.'['.$_skey.'] = '.(is_numeric($_sval) ? $_sval : (ctype_upper($_sval) ? $_sval : '"'.$_sval.'"'));
+						}
+					}
+				} else {
+					$data[] = $skey.' = '.(is_numeric($sval) ? $sval : (ctype_upper($sval) ? $sval : '"'.$sval.'"'));
+				}
+			}
+		} else {
+			$data[] = $key.' = '.(is_numeric($val) ? $val : (ctype_upper($val) ? $val : '"'.$val.'"'));
+		}
+		// empty line
+		$data[] = null;
+	}
+	return (implode(PHP_EOL, $data).PHP_EOL);
 }
 
 // Useful comparison functions

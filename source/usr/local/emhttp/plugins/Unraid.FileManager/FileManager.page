@@ -19,12 +19,21 @@ Tag="folder"
  */
 
 require_once '/usr/local/emhttp/plugins/Unraid.FileManager/fileManagerHelpers.php';
+include_once('/usr/local/emhttp/filemanager/class/FileManager.php');
+
+// Multi-language support
+$plugin = 'Unraid.FileManager';
+$translations = file_exists("$docroot/webGui/include/Translations.php");
+require_once "$docroot/plugins/$plugin/Legacy.php";
 ?>
+<?if (!$translations):?>
+<?eval('?>'.parse_file("$docroot/plugins/$plugin/FileManager.page"))?>
+<?else:?>
 <script>
 
 // Preset fields to be enabled/disabled as appropriate
 
-function presetFilemanager(form) {
+function presetFileManager(form) {
 }
 
 function startFM() {
@@ -47,37 +56,53 @@ function resize() {
 }
 
 function userShares() {
+  alert ("userShares");
 }
 
 function onlyDrives() {
+  alert ("onlyDrives");
+}
+
+function viewFiles(form) {
+  alert ("viewFiles");
+  var scopev = form.elements['scope'];
+  alert ("viewFiles - loaded scope");
+  alert (scopev[0].checked);
+  alert (scopev[1].checked);
+}
+
+function setLanguage(form) {
 }
 
 </script>
 
 <div class='pluginUpdate'></div>
 
-<input type="radio" name="scope" value="drives" onclick="onlyDrives()"> Drives  <input type="radio" name="scope" value="user" onclick="onlyDrives"> User Shares<br>         
-: <input type="button" id="Done" value="Done" onclick="done()">
-<a style='float:right' href='https://www.paypal.com/cgi-bin/webscr?cmd=xclick&amp;business=info@gerd-tentler.de&amp;item_name=FileManager&amp;no_shipping=1&amp;no_note=1&amp;&currency_code=EUR&amp;lc=US&amp;bn=PP-BugNowBF' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a>
+<input type="radio" name="scope" value="drives" onclick="onlyDrives()"> _(Drives)_<br>
+<input type="radio" name="scope" value="user" onclick="onlyDrives"> _(User Shares)_
+:filemanager_view_plug:
+> Select the way you want  to view the Unraid file system.<br>For safety reasons you cannot view it at the User Share level and the Drive level at the same time as this would make it possible for the user to perform an action that coulg lead to data loss.
+:end
 
- 
+<input type="button" id="viewFiles" value="View Files" onclick="viewFiles(this.form)">
+<input type="button" id="Done" value="Done" onclick="done()">
+<a style='float:right' href='https://www.paypal.com/cgi-bin/webscr?cmd=xclick&amp;business=info@gerd-tentler.de&amp;item_name=FileManager&amp;no_shipping=1&amp;no_note=1&amp;&currency_code=EUR&amp;lc=US&amp;bn=PP-BugNowBF' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" title="Donate to FileManager author"></a>
+<a style='float:right' href='https://www.paypal.com/cgi-bin/webscr?cmd=xclick&amp;business=info@gerd-tentler.de&amp;item_name=FileManager&amp;no_shipping=1&amp;no_note=1&amp;&currency_code=EUR&amp;lc=US&amp;bn=PP-BugNowBF' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" title="Donate to Unraid plugin author"></a>
+
   <?
-  include_once('/usr/local/emhttp/filemanager/class/FileManager.php');
-  $FineManager = null;		// ensure we destroy any exiting FileManager object
+
+  $FileManager = null;		// ensure we destroy any exiting FileManager objects
   $FileManager = new FileManager();
-  // If we need to over-ride any default settings do it here!
-  $FileManager->fmgrWebPath = '../../filemanager';
-  $FileManager->fmgrCaption = 'tower';
+  
+    // If we need to over-ride any default settings do it here!
+  $FileManager->fmWebPath = "/filemanager";
+  $FileManager->fmCaption = $var['NAME'];
+  $FileManager->debugInfo = true;
+  
   ?>
+  <br>
 
   <div markdown="0" id="fmArea" style="height:900px;">
-  <table border="0" style="width:90%;height=50%"><tr>
-  <td align="center">
-
   <?= $FileManager->create(); ?>
-  
-  </td>
-  </tr></table>
-
   </div>
-  -->
+<?endif;?>

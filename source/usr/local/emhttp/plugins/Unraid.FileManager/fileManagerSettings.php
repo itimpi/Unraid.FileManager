@@ -13,8 +13,23 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  */
- 
+
 require_once '/usr/local/emhttp/plugins/Unraid.FileManager/fileManagerHelpers.php';
+
+// multi language support
+
+$plugin = 'Uhraid.FileManager';
+$docroot = $docroot ?: $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+$translations = file_exists("$docroot/webGui/include/Translations.php");
+if ($translations) {
+  // add translations
+  $_SERVER['REQUEST_URI'] = 'unraidfilemanager';
+  require_once "$docroot/webGui/include/Translations.php";
+} else {
+  // legacy support (without javascript)
+  $noscript = true;
+  require_once "$docroot/plugins/$plugin/Legacy.php";
+}
 
 $action = $_POST['action'];
 fileManagerLoggerDebug("START:  action =$action");
@@ -24,7 +39,10 @@ switch ($action) {
     fileManagerLogger('Current settings reloaded');
     break;
   case 'load':
-    echo File_get_contents($fileSettings);
+    $ini = parse_ini_file($fileSettings);
+    echo $ini;
+    // echo create_ini_string ($ini);
+    // echo File_get_contents($fileSettings);
     fileManagerLogger('Current settings loaded');
     break;
   case 'save':
@@ -41,7 +59,7 @@ switch ($action) {
     fileManagerLoggerDebug('New settings activated');
     echo file_get_contents($fileSettings,$current);
     break;
-  case 'defaults':   
+  case 'defaults':
     fileManagerLogger('Default settings loaded');
     echo File_get_contents($fileDefaults);
     break;

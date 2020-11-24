@@ -1,0 +1,9 @@
+; Translation text for the Unraid FileManagerSettings.page
+
+; This is the master english version
+
+FileManager is a browser based File manager developed by=TEST: FileManager is a browser based File manager developed by
+It is highly configurable which has made it possible to integrate it into the Unraid GUI=
+Reverted to last Saved Settings=
+Settings reset to defaults=
+New settings saved=

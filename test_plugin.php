@@ -81,7 +81,7 @@ if (empty($files)) {
 } else {
     $pluginFile = basename($files[0]);
     $pluginName = preg_replace('/\\.[^.\\s]{3,4}$/', '', $pluginFile);;
-    echo "\n$pluginName\n\n";
+    echo "\n$pluginName\n" . str_repeat('-', strlen($pluginName)) . "\n";
 
     // Do a simple validation of the .plg file contents
     $domplg = new DOMDocument;
@@ -135,12 +135,12 @@ switch ($argv[1]) {
 
     default:
         $cmd = "plugin $mthd " . ($argv[1] == "install" ? "$cwd/" : "" ) . "$pluginName.plg$forced";
-        echo "INFO:  $cmd\n";
+        echo "INFO: $cmd\n\n";
         system ($cmd, $retval);
         echo "\nReturn value: $retval\n";
 }
 
-echo "\nINFO: $pluginName $argv[1]\n Completed\n\n";
+echo "\nINFO: Completed\n\n";
 exit(0);
 
 
