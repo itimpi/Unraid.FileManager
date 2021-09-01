@@ -2,7 +2,7 @@
 /*
  * Script that is run to carry out support tasks for the Unraid.FileManager plugin.
  *
- * Copyright 2019-2020, Dave Walker (itimpi).
+ * Copyright 2019-2021, Dave Walker (itimpi).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License version 2,
@@ -22,43 +22,47 @@ require_once '/usr/local/emhttp/webGui/include/Helpers.php';
 $plugin = 'Unraid.FileManager';
 $dirBoot = "/boot/config/plugins/$plugin";
 $dirRam = "/usr/local/emhttp/plugins/$plugin";
-$fileSettings = "$dirBoot/fileManagerSettings.cfg";
-$fileDefaults = "$dirRam/fileManagerDefaults.cfg";
+$fileManagerCfgFile     = "$dirBoot/fileManager.cfg";			// Currenp Plugin settings
+$fileManagerSettingsFile= "$dirBoot/fileManagerSettings.cfg";	// Current FileManager Settings
+$fileManagerDefaultsFile= "$dirRam/fileManagerDefaults.cfg";	// Default FileManager Settings for unRaid
 // INFO:    Not sure why but this needs to be relative to /Tools/FileManager
-$filePhp      = "$dirRam/plugins/$plugin/fileManagerSettings.php";
-$fileCurrent  = '/usr/local/emhttp/filemanager/config.inc.php';
+$fileManagerPhpFile     = "$dirRam/fileManagerSettings.php";
+$fileManagerCurrentFile = "$dirRam/filemanager/config.inc.php";
 $var = parse_ini_file('/var/local/emhttp/var.ini');
 
-if (! file_exists($fileSettings))  {
-    copy($fileDefaults, $fileSettings);
+if (file_exists($fileManagerCfgFile)) {
+    fileManagerLoggerTesting("Loading saved plugin settings");
+	$fileManagerCfg = parse_ini_file($fileManagerCfgFile);
+} else {
+    fileManagerLoggerTesting("No saved plugin settings");
+	$fileManagerCfg = [];
+}
+
+// Set a value if not already set for the configuration file
+// ... and set a variable of the same name to the current value
+function setCfgValue ($key, $value) {
+	$cfg = $GLOBALS['fileManagerCfg'];
+	if (! array_key_exists($key,$cfg)) {
+		fileManagerLoggerTesting("cfg option $key set to default of $value");
+		$cfg[$key] = $value;
+	}
+	$GLOBALS[$key] = $cfg[$key];
+}
+// Set defaults for any missing/new values
+setCfgValue('fileManagerLogging', '2');
+setCfgValue('fileManagerLanguage', 'en');
+
+if (! file_exists($fileManagerSettingsFile))  {
+    copy($fileManagerDefaultsFile, $fileManagerSettingsFile);
     fileManagerLogger("No saved settings, so set to plugin defaults");
 } else {
     fileManagerLoggerDebug("Using saved settings");
 }
 
-$current = file_get_contents($fileSettings);
-// $current = preg_replace(["/\r\n/","/\r/","/\n$/"],["\n","\n",""],$current);
 // Ensure current settings are starting point for fileManager
-copy ($fileSettings, $fileCurrent);
-
-# Write message to syslog
-function fileManagerLogger($string) {
-  global $argv;
-  $string = str_replace("'","",$string);
-  shell_exec('logger -t "FileManager" "' . $string . '"');
-}
-
-# Write message to syslog if debug logging active
-function fileManagerLoggerDebug($string) {
-    // ***** Comment out next line if debug logging not required *****
-    fileManagerLogger("DEBUG: " . $string);
-}
-
-# Write message to syslog if testing logging active
-function fileManagerLoggerTesting($string) {
-    // ***** Comment out next line if testing logging not required *****
-    fileManagerLogger("TESTING: " . $string);
-}
+copy ($fileManagerSettingsFile, $fileManagerCurrentFile);
+$fileManagerCurrent = file_get_contents($fileManagerSettingsFile);
+$fileManagerCurrent = preg_replace(["/\r\n/","/\r/","/\n$/"],["\n","\n",""],$fileManagerCurrent);
 
 /**
  * Create an ini string suitable for writing to a configuration file
@@ -71,7 +75,7 @@ function create_ini_string($array = []) {
 	if (!is_array($array)) {
 		throw new \InvalidArgumentException('Function argument must be an array.');
 	}
-	// process array
+	// process array 
 	$data = array();
 	foreach ($array as $key => $val) {
 		if (is_array($val)) {
@@ -98,6 +102,27 @@ function create_ini_string($array = []) {
 	return (implode(PHP_EOL, $data).PHP_EOL);
 }
 
+// Logging routines
+
+# Write message to syslog
+function fileManagerLogger($string) {
+    $string = str_replace("'","",$string);
+    shell_exec('logger -t "unRaid.FileManager" "' . $string . '"');
+}
+
+# Write message to syslog if debug logging active
+function fileManagerLoggerDebug($string) {
+    if ($GLOBALS['fileManagerLogging'] > 0) fileManagerLogger("DEBUG: " . $string);
+}
+
+# Write message to syslog if testing logging active
+function fileManagerLoggerTesting($string) {
+    if ($GLOBALS['fileManagerLogging'] > 1) fileManagerLogger("TESTING: " . $string);
+}
+
+function parityTuningLoggerCLI($string) {
+  	if ($GLOBALS['fileManagerCLI']) echo $string . "\n";
+}
 // Useful comparison functions
 
 function startsWith($haystack, $beginning, $caseInsensitivity = false){
@@ -113,4 +138,5 @@ function endsWith($haystack, $ending, $caseInsensitivity = false){
     else
         return strpos($haystack, $ending, strlen($haystack) - strlen($ending)) !== false;
 }
+
 ?>

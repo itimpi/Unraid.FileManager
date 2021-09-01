@@ -6,7 +6,7 @@ Tabs="true"
 Tag="folder"
 ---
 <?PHP
-/* Copyright 2019, Dave Walker (itimpi).
+/* Copyright 2019-2021, Dave Walker (itimpi).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License version 2,
@@ -19,7 +19,7 @@ Tag="folder"
  */
 
 require_once '/usr/local/emhttp/plugins/Unraid.FileManager/fileManagerHelpers.php';
-include_once('/usr/local/emhttp/filemanager/class/FileManager.php');
+include_once('/usr/local/emhttp/plugins/Unraid.FileManager/filemanager/class/FileManager.php');
 
 // Multi-language support
 $plugin = 'Unraid.FileManager';
@@ -29,6 +29,10 @@ require_once "$docroot/plugins/$plugin/Legacy.php";
 <?if (!$translations):?>
 <?eval('?>'.parse_file("$docroot/plugins/$plugin/FileManager.page"))?>
 <?else:?>
+<?
+// read translations
+parse_plugin('unraidfilemanager');
+?>
 <script>
 
 // Preset fields to be enabled/disabled as appropriate
@@ -78,6 +82,14 @@ function setLanguage(form) {
 
 <div class='pluginUpdate'></div>
 
+<form   markdown = "1" 
+        id       = "FileManager"
+        method   = "POST" 
+        action   = "/update.php" 
+        target   = "progressFrame">
+
+<input type='hidden' name='csrf_token' value="<?=$GLOBALS['var']?>">
+
 <input type="radio" name="scope" value="drives" onclick="onlyDrives()"> _(Drives)_<br>
 <input type="radio" name="scope" value="user" onclick="onlyDrives"> _(User Shares)_
 :filemanager_view_plug:
@@ -95,7 +107,7 @@ function setLanguage(form) {
   $FileManager = new FileManager();
   
     // If we need to over-ride any default settings do it here!
-  $FileManager->fmWebPath = "/filemanager";
+  $FileManager->fmWebPath = "/webGui/plugins/Unraid.FileManager/filemanager/";
   $FileManager->fmCaption = $var['NAME'];
   $FileManager->debugInfo = true;
   
@@ -105,4 +117,6 @@ function setLanguage(form) {
   <div markdown="0" id="fmArea" style="height:900px;">
   <?= $FileManager->create(); ?>
   </div>
+</form>
+
 <?endif;?>

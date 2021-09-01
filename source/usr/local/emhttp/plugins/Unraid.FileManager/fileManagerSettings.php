@@ -2,7 +2,7 @@
 /*
  * Script that is run to carry out support tasks for the Unraid.FileManader plugin.
  *
- * Copyright 2019, Dave Walker (itimpi).
+ * Copyright 2019-2021, Dave Walker (itimpi).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License version 2,
@@ -27,7 +27,7 @@ if ($translations) {
   require_once "$docroot/webGui/include/Translations.php";
 } else {
   // legacy support (without javascript)
-  $noscript = true;
+  $noscript = false;
   require_once "$docroot/plugins/$plugin/Legacy.php";
 }
 
@@ -35,33 +35,33 @@ $action = $_POST['action'];
 fileManagerLoggerDebug("START:  action =$action");
 switch ($action) {
   case 'undo':
-    echo File_get_contents($fileSettings);
+    echo File_get_contents($fileManagerCfg);
     fileManagerLogger('Current settings reloaded');
     break;
   case 'load':
-    $ini = parse_ini_file($fileSettings);
+    $ini = parse_ini_file($fileManagerCfg);
     echo $ini;
     // echo create_ini_string ($ini);
-    // echo File_get_contents($fileSettings);
+    // echo File_get_contents($fileManagerCfg);
     fileManagerLogger('Current settings loaded');
     break;
   case 'save':
-    $backupContents = file_get_contents($fileSettings);
-    if (! $backupContents ) $backupContents = file_get_contents($fileDefaults);
-    file_put_contents("$fileSettings.bak",$backupContents);
+    $backupContents = file_get_contents($fileManagerCfg);
+    if (! $backupContents ) $backupContents = file_get_contents($fileManageDefaults);
+    file_put_contents("$fileManagerCfg.bak",$backupContents);
     fileManagerLoggerDebug("Backup of previous settings saved");
     $current = $_POST['filedata'];
     // $current = preg_replace(["/\r\n/","/\r/","/\n$/"],["\n","\n",""],$_POST['filedata']);
     fileManagerLoggerDebug('Data length:' . strlen($current));
-    file_put_contents($fileSettings,$current);
+    file_put_contents($fileManagerCfg,$current);
     fileManagerLogger('Updated settings saved');
-    copy ($fileSettings, $fileCurrent);
+    copy ($fileManagerCfg, $fileCurrent);
     fileManagerLoggerDebug('New settings activated');
-    echo file_get_contents($fileSettings,$current);
+    echo file_get_contents($fileManagerCfg,$current);
     break;
   case 'defaults':
     fileManagerLogger('Default settings loaded');
-    echo File_get_contents($fileDefaults);
+    echo File_get_contents($fileManageDefaults);
     break;
   default:
     fileManagerLogger("ERROR: action type '$action' not recognized");

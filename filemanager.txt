@@ -1,9 +1,0 @@
-; Translation text for the Unraid FileManager.page file
-; This is the master english version
-
-Drives=TEST: Drives
-User Shares=TEST: User Shares
-
-:filemanager_view_plug:
-> Select the way you want  to view the Unraid file system.<br>For safety reasons you cannot view it at the User Share level and the Drive level at the same time as this would make it possible for the user to perform an action that coulg lead to data loss.
-:end

@@ -13,7 +13,7 @@
  * - Plugin file is located in the current folder with a name of the form <plugin-name>.plg
  * - CA template (if being used) is also in current folder named as <plugin-name>.xml
  *
- * Copyright 2019, Dave Walker (itimpi).
+ * Copyright 2019-2021, Dave Walker (itimpi).
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License version 2,
@@ -38,12 +38,6 @@ function usage() {
     echo "  check      check plugin\n";
     echo "  update     update plugin\n";
     echo "  template   install CA template for the plugin\n\n";
-}
-
-if ($argc != 2) {
-    echo "\nERROR: Invalid syntax\n";
-    usage();
-    exit (1);
 }
 
 $mthd = $argv[1];
@@ -123,6 +117,8 @@ if (empty($files)) {
     // }
 }
 
+// Carry out the requested action
+
 switch ($argv[1]) {
     case "validate":
         break;
@@ -135,12 +131,12 @@ switch ($argv[1]) {
 
     default:
         $cmd = "plugin $mthd " . ($argv[1] == "install" ? "$cwd/" : "" ) . "$pluginName.plg$forced";
-        echo "INFO: $cmd\n\n";
+        echo "INFO:  $cmd\n";
         system ($cmd, $retval);
         echo "\nReturn value: $retval\n";
 }
 
-echo "\nINFO: Completed\n\n";
+echo "\nINFO: $pluginName $argv[1]\n Completed\n\n";
 exit(0);
 
 

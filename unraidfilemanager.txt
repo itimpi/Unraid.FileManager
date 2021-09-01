@@ -1,0 +1,47 @@
+; Translation text for the Unraid FileManager plugin
+; This is the master English version
+
+Drives=TEST: Drives
+User Shares=TEST: User Shares
+
+:filemanager_view_plug:
+> Select the way you want  to view the Unraid file system.<br>For safety reasons you cannot view it at the User Share level and the Drive level at the same time as this would make it possible for the user to perform an action that could lead to data loss.
+:end
+
+; Settings page
+
+:filemanager_intro_plug:
+FileManager is a browser based File Manager developed by [Gerd Tentler](http://www.gerd-tentler.de/tools/filemanager/).  It is highly configurable which has made it possible to integrate it into the Unraid GUI.
+:end
+Reverted to last Saved Settings=
+Settings reset to defaults=
+New settings saved=
+
+; ISO language codes
+bg=Bulgarian
+ca=Catalan
+cs=Czech
+da=Danish
+de=German
+el=Greek
+en=English
+es=Spanish
+et=Estonian
+fa=Persian
+fi=Finnish
+fr=French
+he=Hebrew
+hu=Hungarian
+it=Italian
+iv=Latvian
+nl=Dutch
+no=Norwegian
+pl=Polish
+pt-BR=Portuguese (Brazilian)
+pt=Portuguese
+ro=Romanian
+ru=Russian
+sv=Swedish
+tr=Turkish
+zh-Hans=Chinese (Simplified)
+zh-TW=Chinese (Mandarin)
