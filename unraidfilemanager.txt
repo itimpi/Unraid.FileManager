@@ -5,7 +5,7 @@ Drives=TEST: Drives
 User Shares=TEST: User Shares
 
 :filemanager_view_plug:
-> Select the way you want  to view the Unraid file system.<br>For safety reasons you cannot view it at the User Share level and the Drive level at the same time as this would make it possible for the user to perform an action that could lead to data loss.
+> Select the way you want to view the Unraid file system.<br>For safety reasons you cannot view it at the User Share level and the Drive level at the same time as this would make it possible for the user to perform an action that could lead to data loss.
 :end
 
 ; Settings page
@@ -17,7 +17,7 @@ Reverted to last Saved Settings=
 Settings reset to defaults=
 New settings saved=
 
-; ISO language codes
+; ISO language codes supported by FileManager
 bg=Bulgarian
 ca=Catalan
 cs=Czech

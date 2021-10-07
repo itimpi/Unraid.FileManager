@@ -22,16 +22,10 @@ require_once '/usr/local/emhttp/plugins/Unraid.FileManager/fileManagerHelpers.ph
 include_once('/usr/local/emhttp/plugins/Unraid.FileManager/filemanager/class/FileManager.php');
 
 // Multi-language support
-$plugin = 'Unraid.FileManager';
 $translations = file_exists("$docroot/webGui/include/Translations.php");
-require_once "$docroot/plugins/$plugin/Legacy.php";
-?>
-<?if (!$translations):?>
-<?eval('?>'.parse_file("$docroot/plugins/$plugin/FileManager.page"))?>
-<?else:?>
-<?
-// read translations
-parse_plugin('unraidfilemanager');
+if (!$translations):
+eval('?>'.parse_file("$docroot/plugins/$plugin/FileManager.page"));
+else:
 ?>
 <script>
 
@@ -88,12 +82,18 @@ function setLanguage(form) {
         action   = "/update.php" 
         target   = "progressFrame">
 
+<input type="hidden" 
+       name="#file"    
+       value="<?=PARITY_TUNING_CFG_FILE?>">  
+	   
 <input type='hidden' name='csrf_token' value="<?=$GLOBALS['var']?>">
 
-<input type="radio" name="scope" value="drives" onclick="onlyDrives()"> _(Drives)_<br>
-<input type="radio" name="scope" value="user" onclick="onlyDrives"> _(User Shares)_
+<input type="radio" name="fileManagerScope" value="drives" onclick="onlyDrives()" <?= ($fileManagerScope=='drives')?'checked':'o';?>> 
+<label type="radio" name="fileManagerScope" value="drives">_(Drives)_</label><br>
+<input type="radio" name="fileManagerScope" value="user" onclick="userShares" <?= ($fileManagerScope=='shares')?'checked': '';?>>
+<label type="radio" name="fileManagerScope" value="shares">_(User Shares)_</label>
 :filemanager_view_plug:
-> Select the way you want  to view the Unraid file system.<br>For safety reasons you cannot view it at the User Share level and the Drive level at the same time as this would make it possible for the user to perform an action that coulg lead to data loss.
+> Select the way you want to view the Unraid file system.<br>For safety reasons you cannot view it at the User Share level and the Drive level at the same time as this would make it possible for the user to perform an action that could lead to data loss.
 :end
 
 <input type="button" id="viewFiles" value="View Files" onclick="viewFiles(this.form)">
@@ -107,15 +107,14 @@ function setLanguage(form) {
   $FileManager = new FileManager();
   
     // If we need to over-ride any default settings do it here!
-  $FileManager->fmWebPath = "/webGui/plugins/Unraid.FileManager/filemanager/";
+  $FileManager->fmWebPath = "/plugins/Unraid.FileManager/filemanager/";
   $FileManager->fmCaption = $var['NAME'];
   $FileManager->debugInfo = true;
   
   ?>
   <br>
-
   <div markdown="0" id="fmArea" style="height:900px;">
-  <?= $FileManager->create(); ?>
+
   </div>
 </form>
 

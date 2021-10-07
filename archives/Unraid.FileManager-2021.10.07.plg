@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name "Unraid.FileManager">
 <!ENTITY author "Dave Walker (itimpi)">
-<!ENTITY version "2021.08.26">
-<!ENTITY md5 "d785b7d75a3eb15083ff45e4690dcc53">
+<!ENTITY version "2021.10.07">
+<!ENTITY md5 "93f89d35b75eafdf2f9e99245d98af08">
 <!ENTITY launch "Settings/Scheduler">
 <!ENTITY plugin "Unraid.FileManager">
 <!ENTITY plugdir "/usr/local/emhttp/plugins/&name;">
@@ -22,8 +22,9 @@
 	support="https://lime-technology.com/forums/topic/TBD/">!!
 /use
 <CHANGES>
-### 2021.08.25
+### 2021.10.07
 - New: Test version
+
 ### 2020.09.11
 - New: FileManages binaries upgraded to use v10.52
 
@@ -31,7 +32,7 @@
 - New: Changes in preparation for multi-language support
 
 ### 2019-06-09 
-- Early test version for testing purposes only
+- Early test version ti ckeck for viability
 </CHANGES>
 
 <FILE Run="/bin/bash">

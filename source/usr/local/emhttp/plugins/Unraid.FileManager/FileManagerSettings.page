@@ -1,6 +1,7 @@
-Menu="FileManager:2"
+Menu="FileManager:2""
 Title="FileManager Settings"
 Tag="gear"
+Icon="file"
 ---
 <?PHP
 /* Copyright 2019-2021, Dave Walker (itimpi).
@@ -15,20 +16,14 @@ Tag="gear"
  * all copies or substantial portions of the Software.
  */
 
-require_once '/usr/local/emhttp/webGui/include/Helpers.php';
+
 require_once '/usr/local/emhttp/plugins/Unraid.FileManager/fileManagerHelpers.php';
 
 // Multi-language support
-$plugin = 'Unraid.FileManager';
 $translations = file_exists("$docroot/webGui/include/Translations.php");
-require_once "$docroot/plugins/$plugin/Legacy.php";
-?>
-<?if (!$translations):?>
-<?eval('?>'.parse_file("$docroot/plugins/$plugin/FileManagerSettings.page"))?>
-<?else:?>
-<?
-// read translations
-parse_plugin('unraidfilemanager');
+if (!$translations):
+eval('?>'.parse_file("$docroot/plugins/$plugin/FileManagerSettings.page"));
+else:
 ?>
 <script>
 
@@ -61,6 +56,8 @@ function madeEdit() {
 
 function undoEdit() {
     contactServer('undo', _('Reverted to last Saved Settings'));
+	// document.getElementById('parityTuningCustomResume')
+	// #arg[1]
 }
 
 function loadDefaults() {
@@ -69,7 +66,7 @@ function loadDefaults() {
 }
 
 function saveSettings() {
-    contactServer('save', _('New settings saved'));
+    // contactServer('save', _('New settings saved'));
 }
 
 function resetSettingsForm() {
@@ -90,11 +87,20 @@ function resetSettingsForm() {
         action   = "/update.php" 
         target   = "progressFrame">
 
+<input type="hidden" 
+       name="#command" 
+       value="<?=$fileManagerPhpFile?>">
+<input type="hidden"
+       name="#arg[1]"
+       value="save">
+
 <input type='hidden' name='csrf_token' value="<?=$GLOBALS['var']?>">
 
 :filemanager_intro_plug:
-FileManager is a browser based File Manager developed by [Gerd Tentler](http://www.gerd-tentler.de/tools/filemanager/).  It is highly configurable which has made it possible to integrate it into the Unraid GUI. 
+FileManager is a browser based File Manager developed by [Gerd Tentler](http://www.gerd-tentler.de/tools/filemanager/).  
+It is highly configurable which has made it possible to integrate it into the Unraid GUI. 
 :end
+
 Language Code:
 : <select name="fileManagerLanguage" 
           size='1' class='narrow' 
@@ -112,29 +118,26 @@ Language Code:
   
 :fmLanguages_plug:
 > The File Manager supports a wide variety of languages.  These are not necessarily the same as the ones supported by the main Unraid GUI.  This setting is applied within file Manager independently of what you select for the main unRaid GUI.
-:end
 
 The section below shows the full configuration file that is currently in use. The default settings issued with the plugin have been chosen to be appropriate for standard Unraid use but at the moment they are still being tuned for optimal values.
-<p>You can edit the entries below to try out the effects of different settings but take great care as the syntax is not checked and getting it wrong can stop the FileManager tab from displaying a list of files.  When you press Apply then the settings below are stored on the flash drive in the <?=$fileManagerCfg?> file</p>
 
-<input  type="button" 
+You can edit the entries below to try out the effects of different settings but take great care as the syntax is not checked and getting it wrong can stop the FileManager tab from displaying a list of files.  When you press Apply then the settings below are stored on the flash drive in the <?=$fileManagerCfg?> file</p>
+:end
+
+<input  type="submit" 
         id="btnDefaults" 
         value="FileManager Default Settings" 
         onclick="loadDefaults()">
-<input  type="button" 
-        id="btnUnraid" 
-        value="Unraid Settings" 
-        onclick="loadUnraid()">
-<input type="button"  
+<input type="submit"  
         id="btnApply"
         value="_(Apply)_"
         onclick="saveSettings()" disabled> 
-<input type="button"
+<input type="submit"
         id="btnReset"  
         value="Reset" 
         onclick="undoEdit()" 
         style="display:none">
-<input type="button" 
+<input type="submit" 
         id="btnDone" 
         value="Done" 
         onclick="done()">
@@ -151,8 +154,6 @@ The section below shows the full configuration file that is currently in use. Th
 > undo any changes you make (before saving). Click **Done** to exit this page.
 :end
 
-<?=substr_count($fileManageCurrent,"\n")+1?>"
-
 <div markdown="0" class="advanced" style="box-sizing: border-box;">
 <center>
 <textarea   class = "raw"
@@ -161,7 +162,7 @@ The section below shows the full configuration file that is currently in use. Th
             spellcheck="false" 
             cols="80" 
             oninput="madeEdit()"
-            rows="<?=substr_count($fileManagerCurrent)+1?>" 
+            rows="<?=substr_count($fileManagerCurrent,"\n")+1?>" 
             style="box-sizing:border-box;marge:0 auto;border-style:solid;border-width:3;padding:25;font-family:Courier;width:1200px">
 <?=$fileManagerCurrent?>
 </textarea>

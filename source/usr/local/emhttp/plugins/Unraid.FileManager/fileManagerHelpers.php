@@ -19,6 +19,11 @@ $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 
 require_once '/usr/local/emhttp/webGui/include/Helpers.php';
 
+// Set up some useful constants used in multiple files
+define('EMHTTP_DIR' ,               '/usr/local/emhttp');
+define('CONFIG_DIR' ,               '/boot/config');
+define('PLUGINS_DIR' ,              CONFIG_DIR . '/plugins');
+
 $plugin = 'Unraid.FileManager';
 $dirBoot = "/boot/config/plugins/$plugin";
 $dirRam = "/usr/local/emhttp/plugins/$plugin";
@@ -29,6 +34,24 @@ $fileManagerDefaultsFile= "$dirRam/fileManagerDefaults.cfg";	// Default FileMana
 $fileManagerPhpFile     = "$dirRam/fileManagerSettings.php";
 $fileManagerCurrentFile = "$dirRam/filemanager/config.inc.php";
 $var = parse_ini_file('/var/local/emhttp/var.ini');
+
+// Multi-Language support code enabler for non-GUI usage
+
+$plugin = 'parity.check.tuning';
+if (file_exists(EMHTTP_DIR . "/webGui/include/Translations.php")) {
+	$login_locale = '';
+	if (!isset($_SESSION['locale']) || ($_SESSION['locale']=='')) {
+		fileManagerLoggerTesting("setting locale from dynamix setting");
+		$_SESSION['locale'] = $login_locale = $dynamixCfg['display']['locale'];
+	}	
+	fileManagerLoggerTesting("Multi-Language support active, locale: " . $_SESSION['locale']);
+	$_SERVER['REQUEST_URI'] = 'paritychecktuning';
+	require_once "$docroot/webGui/include/Translations.php";
+	parse_plugin('unraidfilemanager');
+} else {
+	require_once EMHTTP_DIR . "/plugins/parity.check.tuning/Legacy.php";
+	fileManagerLoggerTesting('Legacy Language support active');
+}
 
 if (file_exists($fileManagerCfgFile)) {
     fileManagerLoggerTesting("Loading saved plugin settings");
@@ -51,6 +74,7 @@ function setCfgValue ($key, $value) {
 // Set defaults for any missing/new values
 setCfgValue('fileManagerLogging', '2');
 setCfgValue('fileManagerLanguage', 'en');
+setCfgValue('fileManagerScope', 'shares');
 
 if (! file_exists($fileManagerSettingsFile))  {
     copy($fileManagerDefaultsFile, $fileManagerSettingsFile);
@@ -62,7 +86,8 @@ if (! file_exists($fileManagerSettingsFile))  {
 // Ensure current settings are starting point for fileManager
 copy ($fileManagerSettingsFile, $fileManagerCurrentFile);
 $fileManagerCurrent = file_get_contents($fileManagerSettingsFile);
-$fileManagerCurrent = preg_replace(["/\r\n/","/\r/","/\n$/"],["\n","\n",""],$fileManagerCurrent);
+//$fileManagerCurrent = preg_replace(["/\r\n/","/\r/","/\n$/"],["\n","\n",""],$fileManagerCurrent);
+//$fileManagerCurrent = str_replace(["/\r","",$fileManagerCurrent);
 
 /**
  * Create an ini string suitable for writing to a configuration file
