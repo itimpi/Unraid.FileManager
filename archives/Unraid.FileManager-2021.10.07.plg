@@ -3,7 +3,7 @@
 <!ENTITY name "Unraid.FileManager">
 <!ENTITY author "Dave Walker (itimpi)">
 <!ENTITY version "2021.10.07">
-<!ENTITY md5 "93f89d35b75eafdf2f9e99245d98af08">
+<!ENTITY md5 "e3d8cf405ce4f6f449fe4df4e9ab4afa">
 <!ENTITY launch "Settings/Scheduler">
 <!ENTITY plugin "Unraid.FileManager">
 <!ENTITY plugdir "/usr/local/emhttp/plugins/&name;">
